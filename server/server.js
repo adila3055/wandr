@@ -19,11 +19,23 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
-// ─── MONGODB CONNECTION ────────────────────────────────────────────
+// ─── MONGODB CONNECTION (Connection first, then listen) ───────────
+const PORT = process.env.PORT || 5000;
+
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+  .connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 30000,
+  })
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed:", err);
+    process.exit(1);
+  });
 
 // ─── SCHEMAS & MODELS ──────────────────────────────────────────────
 
@@ -491,12 +503,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  // TYPING INDICATOR
+  
   socket.on("chat:typing", ({ tripId, userName }) => {
     socket.to(tripId).emit("chat:typing", { userName });
   });
 
-  // DISCONNECT
+
   socket.on("disconnect", () => {
     for (const tripId in onlineUsers) {
       if (onlineUsers[tripId][socket.id]) {
@@ -511,16 +523,5 @@ io.on("connection", (socket) => {
   });
 });
 
-// ─── SERVE FRONTEND (PRODUCTION) ──────────────────────────────────
-app.use(express.static(path.join(__dirname, "../client/dist")));
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
-
-// ─── START SERVER ─────────────────────────────────────────────────
-
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+// ─── STARTUP MOVED TO MONGO CONNECTION BLOCK ─────────────────────
 
