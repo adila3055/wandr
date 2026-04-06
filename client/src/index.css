@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f5f2eb;
+  --cream-dark: #ede9df;
+  --cream-border: #ddd8cc;
+  --green: #2d6a4f;
+  --green-light: #52b788;
+  --green-soft: #d8f3dc;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --text-muted: #6b6558;
+  --text-light: #9c9589;
+  --border: #e2ddd4;
+  --shadow: 0 2px 8px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --red: #e63946;
+  --orange: #f4a261;
+  --blue: #457b9d;
+  --purple: #7b2d8b;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--font-sans); }
+input, textarea { font-family: var(--font-sans); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--cream-border); border-radius: 3px; }
+
+/* Leaflet fix */
+.leaflet-container { font-family: var(--font-sans) !important; }
